@@ -1,27 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
+import axios from "axios";
 import Planet from "./Planet";
 
-const fetchPlanets = async () => {
-  const response = await fetch("http://swapi.dev/api/planets/");
-  return response.json();
+const fetchPlanets = async (key, page) => {
+  const response = await axios(`http://swapi.dev/api/planets/?page=${page}`);
+  return response.data;
 };
 
 const Planets = () => {
-  const { data, status } = useQuery("planets", fetchPlanets, {
+  const [ page, setPage ] = useState(1);
+  const { data, isError, isLoading, isSuccess } = useQuery(["planets", page], fetchPlanets, {
     staleTime: 2000,
   });
 
-  console.log("data", data);
-
   return (
     <div>
-      Planets
-      {status === "error" && (
+      <button onClick={() => setPage(1)}>Page 1</button>
+      <button onClick={() => setPage(page => page - 1)}>Prev</button>
+      <button onClick={() => setPage(page => page + 1)}>Next</button>
+      {isError && (
         <div>An error has occurred while fetching data</div>
       )}
-      {status === "loading" && <div>Fetching data...</div>}
-      {status === "success" && (
+      {isLoading && <div>Fetching data...</div>}
+      {isSuccess && (
         <div>
           {data.results.map((planet) => (
             <Planet key={planet.name} planet={planet} />

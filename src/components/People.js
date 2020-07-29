@@ -14,7 +14,6 @@ const People = () => {
 
   return (
     <div>
-      people
       {status === "error" && (
         <div>An error has occurred while fetching data</div>
       )}
