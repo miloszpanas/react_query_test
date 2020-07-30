@@ -16,18 +16,42 @@ h1{
 }
 button{
   margin: 0 10px;
-  background: transparent;
-  border: 3px solid #ccc;
+  background: linear-gradient(45deg #fff, 50%, #cfcf42 50%);
+  border: 3px solid #cfcf42;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   border-radius: 20px;
   padding: 10px;
-  color: #ccc;
   font-size: 1.2em;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
 }
-button:hover{
-  color: #fff;
-  border-color: #fff;;
+
+button:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(45deg, #cfcf42 50%, transparent 50%);
+  overflow: hidden;
+  z-index: -1;
 }
+
+button, button:after {
+  background-size: 300%;
+  background-position: 100%;
+  transition: .5s;
+}
+
+button:hover, button:hover:after {
+  background-position: 0;
+  -webkit-text-fill-color: #222;
+}
+
 .content{
   text-align: left;
 }
