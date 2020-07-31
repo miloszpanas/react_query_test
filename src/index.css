@@ -56,6 +56,13 @@ button:disabled {
   border: 3px solid grey;
   cursor: not-allowed;
 }
+button:disabled:hover {
+  -webkit-text-fill-color: grey;
+}
+button:disabled:hover::after {
+  -webkit-text-fill-color: grey;
+  background-position: 100%;
+}
 
 .content{
   text-align: left;
