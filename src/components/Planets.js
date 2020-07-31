@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery, usePaginatedQuery } from "react-query";
 import axios from "axios";
 import Planet from "./Planet";
 
@@ -10,25 +10,27 @@ const fetchPlanets = async (key, page) => {
 
 const Planets = () => {
   const [ page, setPage ] = useState(1);
-  const { data, isError, isLoading, isSuccess } = useQuery(["planets", page], fetchPlanets, {
+  const { status, resolvedData, latestData } = usePaginatedQuery(["planets", page], fetchPlanets, {
     staleTime: 2000,
   });
 
   return (
     <div>
-      <button onClick={() => setPage(1)}>Page 1</button>
-      <button onClick={() => setPage(page => page - 1)}>Prev</button>
-      <button onClick={() => setPage(page => page + 1)}>Next</button>
-      {isError && (
+      {status === "error" && (
         <div>An error has occurred while fetching data</div>
       )}
-      {isLoading && <div>Fetching data...</div>}
-      {isSuccess && (
-        <div>
-          {data.results.map((planet) => (
-            <Planet key={planet.name} planet={planet} />
-          ))}
-        </div>
+      {status === "loading" && <div>Fetching data...</div>}
+      {status === "success" && (
+        <>
+          <button disabled={page === 1} onClick={() => setPage(page => Math.max(page - 1, 1))}>Prev</button>
+          <button>{page}</button>
+          <button disabled={!latestData || !latestData.next} onClick={() => setPage(page => (!latestData || !latestData.next ? page : page + 1))}>Next</button>
+          <div>
+            {resolvedData.results.map((planet) => (
+              <Planet key={planet.name} planet={planet} />
+            ))}
+          </div>
+        </>
       )}
     </div>
   );

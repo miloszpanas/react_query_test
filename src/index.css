@@ -29,7 +29,7 @@ button{
   overflow: hidden;
 }
 
-button:after {
+button::after {
   content: "";
   position: absolute;
   top: 0;
@@ -50,6 +50,11 @@ button, button:after {
 button:hover, button:hover:after {
   background-position: 0;
   -webkit-text-fill-color: #222;
+}
+
+button:disabled {
+  border: 3px solid grey;
+  cursor: not-allowed;
 }
 
 .content{
